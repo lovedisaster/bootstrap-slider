@@ -186,6 +186,14 @@
 				mouseenter: $.proxy(this.showTooltip, this),
 				mouseleave: $.proxy(this.hideTooltip, this)
 			});
+			this.handle1.on({
+				focus: $.proxy(this.showTooltip, this),
+				blur: $.proxy(this.hideTooltip, this)
+			});
+			this.handle2.on({
+				focus: $.proxy(this.showTooltip, this),
+				blur: $.proxy(this.hideTooltip, this)
+			});
 		}
 
 		if (updateSlider === true) {
@@ -271,6 +279,8 @@
 		},
 
 		mousedown: function(ev) {
+			console.log("mousedown");
+
 			if(!this.isEnabled()) {
 				return false;
 			}
@@ -341,9 +351,11 @@
 				return;
 			}
 
-			ev.preventDefault();
+			var oneStepValuePercentageChange = dir * this.percentage[2];
+			var percentage = this.percentage[handleIdx] + oneStepValuePercentageChange;
+		
+			console.log("keydown percent: " + percentage);
 
-			var percentage = this.percentage[handleIdx] + dir * (this.step/this.diff*100);
 			if (percentage > 100) {
 				percentage = 100;
 			} else if (percentage < 0) {
@@ -355,11 +367,9 @@
 				if (this.dragged === 0 && this.percentage[1] < percentage) {
 					this.percentage[0] = this.percentage[1];
 					this.dragged = 1;
-					this.handle2.focus();
 				} else if (this.dragged === 1 && this.percentage[0] > percentage) {
 					this.percentage[1] = this.percentage[0];
 					this.dragged = 0;
-					this.handle1.focus();
 				}
 			}
 			this.percentage[this.dragged] = this.reversed ? 100 - percentage : percentage;
@@ -377,7 +387,7 @@
 				})
 				.data('value', val)
 				.prop('value', val);
-			return;
+			return false;
 		},
 
 		mousemove: function(ev) {
@@ -390,6 +400,9 @@
 			}
 
 			var percentage = this.getPercentage(ev);
+			
+			console.log("mousemove percent: " + percentage);
+
 			if (this.range) {
 				if (this.dragged === 0 && this.percentage[1] < percentage) {
 					this.percentage[0] = this.percentage[1];
@@ -414,6 +427,8 @@
 		},
 
 		mouseup: function() {
+			console.log("mouseup");
+
 			if(!this.isEnabled()) {
 				return false;
 			}
