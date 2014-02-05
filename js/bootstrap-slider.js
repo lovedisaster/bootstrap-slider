@@ -111,11 +111,9 @@
 
 		this.handle1 = this.picker.find('.slider-handle:first');
 		this.handle1Stype = this.handle1[0].style;
-		this.handle1.attr("tabindex", 0);
 
 		this.handle2 = this.picker.find('.slider-handle:last');
 		this.handle2Stype = this.handle2[0].style;
-		this.handle2.attr("tabindex", 0);
 
 		var handle = this.element.data('slider-handle')||options.handle;
 		switch(handle) {
@@ -221,8 +219,9 @@
 
 		this.enabled = options.enabled && 
 						(this.element.data('slider-enabled') === undefined || this.element.data('slider-enabled') === true);
-		if(!this.enabled)
-		{
+		if(this.enabled) {
+			this.enable();
+		} else {
 			this.disable();
 		}
 	};
@@ -536,12 +535,16 @@
 
 		disable: function() {
 			this.enabled = false;
+			this.handle1.removeAttr("tabindex");
+			this.handle2.removeAttr("tabindex");
 			this.picker.addClass('slider-disabled');
 			this.element.trigger('slideDisabled');
 		},
 
 		enable: function() {
 			this.enabled = true;
+			this.handle1.attr("tabindex", 0);
+			this.handle2.attr("tabindex", 0);
 			this.picker.removeClass('slider-disabled');
 			this.element.trigger('slideEnabled');
 		},
