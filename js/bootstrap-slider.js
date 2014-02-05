@@ -279,8 +279,6 @@
 		},
 
 		mousedown: function(ev) {
-			console.log("mousedown");
-
 			if(!this.isEnabled()) {
 				return false;
 			}
@@ -353,8 +351,6 @@
 
 			var oneStepValuePercentageChange = dir * this.percentage[2];
 			var percentage = this.percentage[handleIdx] + oneStepValuePercentageChange;
-		
-			console.log("keydown percent: " + percentage);
 
 			if (percentage > 100) {
 				percentage = 100;
@@ -372,7 +368,7 @@
 					this.dragged = 0;
 				}
 			}
-			this.percentage[this.dragged] = this.reversed ? 100 - percentage : percentage;
+			this.percentage[this.dragged] = percentage;
 			this.layout();
 			var val = this.calculateValue();
 			this.setValue(val);
@@ -398,11 +394,7 @@
 			if (this.touchCapable && ev.type === 'touchmove') {
 				ev = ev.originalEvent;
 			}
-
 			var percentage = this.getPercentage(ev);
-			
-			console.log("mousemove percent: " + percentage);
-
 			if (this.range) {
 				if (this.dragged === 0 && this.percentage[1] < percentage) {
 					this.percentage[0] = this.percentage[1];
@@ -427,8 +419,6 @@
 		},
 
 		mouseup: function() {
-			console.log("mouseup");
-
 			if(!this.isEnabled()) {
 				return false;
 			}
