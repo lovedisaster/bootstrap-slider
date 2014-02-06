@@ -358,17 +358,10 @@
 			}
 
 			this.dragged = handleIdx;
-			if (this.range) {
-				if (this.dragged === 0 && this.percentage[1] < percentage) {
-					this.percentage[0] = this.percentage[1];
-					this.dragged = 1;
-				} else if (this.dragged === 1 && this.percentage[0] > percentage) {
-					this.percentage[1] = this.percentage[0];
-					this.dragged = 0;
-				}
-			}
+			this.adjustPercentageForRangeSliders(percentage);
 			this.percentage[this.dragged] = percentage;
 			this.layout();
+
 			var val = this.calculateValue();
 			this.setValue(val);
 			this.element
@@ -393,18 +386,12 @@
 			if (this.touchCapable && ev.type === 'touchmove') {
 				ev = ev.originalEvent;
 			}
+			
 			var percentage = this.getPercentage(ev);
-			if (this.range) {
-				if (this.dragged === 0 && this.percentage[1] < percentage) {
-					this.percentage[0] = this.percentage[1];
-					this.dragged = 1;
-				} else if (this.dragged === 1 && this.percentage[0] > percentage) {
-					this.percentage[1] = this.percentage[0];
-					this.dragged = 0;
-				}
-			}
+			this.adjustPercentageForRangeSliders(percentage);
 			this.percentage[this.dragged] = this.reversed ? 100 - percentage : percentage;
 			this.layout();
+
 			var val = this.calculateValue();
 			this.setValue(val);
 			this.element
@@ -415,6 +402,18 @@
 				.data('value', val)
 				.prop('value', val);
 			return false;
+		},
+
+		adjustPercentageForRangeSliders: function(percentage) {
+			if (this.range) {
+				if (this.dragged === 0 && this.percentage[1] < percentage) {
+					this.percentage[0] = this.percentage[1];
+					this.dragged = 1;
+				} else if (this.dragged === 1 && this.percentage[0] > percentage) {
+					this.percentage[1] = this.percentage[0];
+					this.dragged = 0;
+				}
+			}
 		},
 
 		mouseup: function() {
